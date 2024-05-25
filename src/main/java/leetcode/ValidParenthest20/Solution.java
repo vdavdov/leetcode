@@ -1,23 +1,33 @@
 package leetcode.ValidParenthest20;
 
+import java.util.Stack;
+
 public class Solution {
     public static void main(String[] args) {
         System.out.println(isValid("()"));
         System.out.println(isValid("()[]{}"));
-        System.out.println(isValid("(]"));
+        System.out.println(isValid("(])"));
     }
 
     public static boolean isValid(String s) {
-        char c;
-        char b;
-        for (int i = 0; i < s.length() - 1; i++) {
-            c = s.charAt(i);
-            b = s.charAt(i + 1);
-            if (c == '(' && b == ')' || (c == '{' && b == '}' || (c == '[' && b == ']'))) {
-                continue;
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
+            } else if (c == ')' || c == '}' || c == ']') {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+
+                char top = stack.peek();
+                if ((top == '(' && c == ')') || (top == '{' && c == '}') || (top == '[' && c == ']')) {
+                    stack.pop();
+                } else {
+                    return false;
+                }
             }
-            return false;
         }
-        return true;
+        return stack.isEmpty();
     }
 }
